@@ -1,0 +1,32 @@
+<table border='1'>
+        <tr>
+            <th>No</th>
+            <th>Tanggal Tindak Lanjut</th>
+            <th>Nama Admin</th>
+            <th>Catatan</th>
+        </tr><tr>
+            <td>1</td>
+            <td>2023-11-03</td>
+            <td>frd.syf004@gmail.com</td>
+            <td>Ini Kurang satu</td>
+          </tr><tr>
+            <td>2</td>
+            <td>2023-11-03</td>
+            <td>frd.syf004@gmail.com</td>
+            <td>Ini Kurang satu</td>
+          </tr><tr>
+            <td>3</td>
+            <td>2023-11-03</td>
+            <td>frd.syf004@gmail.com</td>
+            <td>Test1</td>
+          </tr><tr>
+            <td>4</td>
+            <td>2023-11-03</td>
+            <td>frd.syf004@gmail.com</td>
+            <td>Test2</td>
+          </tr><tr>
+            <td>5</td>
+            <td>2023-11-03</td>
+            <td>frd.syf004@gmail.com</td>
+            <td>Test3</td>
+          </tr></table>

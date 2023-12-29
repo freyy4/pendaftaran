@@ -1,60 +1,43 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" />
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-<style>
-    td.badge-danger,
-    td.badge-success {
-        text-transform: capitalize;
-    }
-
-    .dataTables_filter input {
-        appearance: none;
-        border: none;
-        outline: none;
-        border-bottom: .2em solid blue;
-        background: rgba(blue, .2);
-        border-radius: .2em .2em 0 0;
-        padding: .4em;
-        color: blue;
-    }
-
-    .dataTables_length select {
-        appearance: none;
-        border: none;
-        outline: none;
-        border-bottom: .2em solid blue;
-        background: rgba(blue, .2);
-        border-radius: .2em .2em 0 0;
-        padding: .4em;
-        color: blue;
-    }
-</style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">Pendaftaran TKI Online</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="dash.php">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="admin.php">Verifikasi Pendaftaran</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tambah_user.php">Tambah Admin</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php" onclick="return yakin()">Keluar</a>
-                </li>
-            </ul>
+<?php
+session_start();
+if (empty($_SESSION['login'])) {
+  header("Location:../../index.php");
+}
+$user = $_SESSION['email'];
+?>
+<nav class="navbar p-0 fixed-top d-flex flex-row">
+  <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+    <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
+  </div>
+  <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+      <span class="mdi mdi-menu"></span>
+    </button>
+    <ul class="navbar-nav navbar-nav-right">
+      <li class="nav-item dropdown">
+        <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
+          <div class="navbar-profile">
+            <img class="img-xs rounded-circle" src="assets/images/faces/face0.png" alt="">
+            <p class="mb-0 d-none d-sm-block navbar-profile-name"><?php echo $user; ?></p>
+            <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+          </div>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+          <a class="dropdown-item preview-item" href="logout.php">
+            <div class="preview-thumbnail">
+              <div class="preview-icon bg-dark rounded-circle">
+                <i class="mdi mdi-logout text-danger"></i>
+              </div>
+            </div>
+            <div class="preview-item-content">
+              <p class="preview-subject mb-1">Log out</p>
+            </div>
+          </a>
         </div>
-    </div>
+      </li>
+    </ul>
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+      <span class="mdi mdi-format-line-spacing"></span>
+    </button>
+  </div>
 </nav>
-<script>
-    function yakin() {
-            return confirm("Apa Anda Yakin Ingin Keluar?");
-        }
-</script>

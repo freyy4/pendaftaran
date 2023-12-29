@@ -9,14 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="cbm.png">
 </head>
 
 <body>
     <?php
     include 'koneksi.php';
     session_start();
-    $id_daftar = $_GET['id_daftar'];
-    $sql = "SELECT * FROM daftars WHERE id_daftar = '$id_daftar'";
+    $id_daftar = $_SESSION['id_daftar'];
+    $sql = "SELECT * FROM daftar WHERE id_daftar = '$id_daftar'";
     $data = mysqli_query($koneksi, $sql);
     while ($d = mysqli_fetch_array($data)) {
     ?>
@@ -112,7 +113,7 @@
             $telepon = $_POST['telepon'];
 
             include "koneksi.php";
-            $update = mysqli_query($koneksi, "UPDATE daftars SET nik = '$nik', nama_lengkap = '$nama_lengkap', tempat_lahir = '$tempat_lahir', tgl_lahir = '$tgl_lahir', status = '$status', tinggi = '$tinggi', berat = '$berat', id_provinsi = '$provinsi', id_kota = '$kota', id_kecamatan = '$kecamatan', id_desa = '$desa', alamat_lengkap = '$alamat_lengkap', telepon = '$telepon' WHERE id_daftar = '$id_daftar';");
+            $update = mysqli_query($koneksi, "UPDATE daftar SET nik = '$nik', nama_lengkap = '$nama_lengkap', tempat_lahir = '$tempat_lahir', tgl_lahir = '$tgl_lahir', status = '$status', tinggi = '$tinggi', berat = '$berat', id_provinsi = '$provinsi', id_kota = '$kota', id_kecamatan = '$kecamatan', id_desa = '$desa', alamat_lengkap = '$alamat_lengkap', telepon = '$telepon' WHERE id_daftar = '$id_daftar';");
 
             if ($update) {
                 echo "<script>

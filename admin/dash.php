@@ -2,54 +2,26 @@
 <html lang="en">
 
 <head>
-    <title>Pendaftaran TKI Online | Verifikasi | Dashboard</title>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .content {
-            max-height: calc(100vh - 100px);
-            padding: 20px;
-        }
-
-        .footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
-
-        h2,
-        h1 {
-            font-weight: bold;
-        }
-
-        h2 {
-            text-transform: capitalize;
-        }
-
-        a.password {
-            font-size: 10px;
-        }
-
-        .container-fluid {
-            margin-top: 20px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Halaman Admin PT Prima Syifa Nusantara</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="assets/vendors/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="assets/images/Screenshot__3_-removebg-preview.png" />
 </head>
 
 <body>
@@ -58,10 +30,35 @@
     //Buat Sesi
     session_start();
     if (empty($_SESSION['login'])) {
-        header("Location:../login_admin.php");
+        header("Location:../index.php");
     }
+    function greetings()
+    {
+        date_default_timezone_set('Asia/Jakarta'); // Ganti dengan zona waktu yang sesuai
+
+        $currentHour = date('G');
+
+        if ($currentHour >= 5 && $currentHour < 12) {
+            return "Selamat Pagi!";
+        } elseif ($currentHour >= 12 && $currentHour < 15) {
+            return "Selamat Siang!";
+        } elseif ($currentHour >= 15 && $currentHour < 18) {
+            return "Selamat Siang!";
+        } else {
+            return "Selamat Malam!";
+        }
+    }
+    $sapaan = greetings();
+    // Jumlah Agensi
+    $agensi = "SELECT * FROM agensi";
+    $result_agensi = mysqli_query($koneksi, $agensi);
+    $jumlahagensi = mysqli_num_rows($result_agensi);
+    // Jumlah Pengaduan
+    $pengaduan = "SELECT * FROM pengaduan";
+    $result_pengaduan = mysqli_query($koneksi, $pengaduan);
+    $jumlahpengaduan = mysqli_num_rows($result_pengaduan);
     // Jumlah Admin
-    $admin = "SELECT * FROM admin";
+    $admin = "SELECT * FROM login WHERE role='admin';";
     $result_admin = mysqli_query($koneksi, $admin);
     $jumlahadmin = mysqli_num_rows($result_admin);
     // Jumlah User Terverifikasi
@@ -69,7 +66,7 @@
     $result_userverify = mysqli_query($koneksi, $userverify);
     $jumlahterverfikasi = mysqli_num_rows($result_userverify);
     // Jumlah Pendaftaran
-    $daftar = "SELECT * FROM daftars";
+    $daftar = "SELECT * FROM daftar";
     $result_daftar = mysqli_query($koneksi, $daftar);
     $jumlahpendaftar = mysqli_num_rows($result_daftar);
     // Jumlah diterima
@@ -80,56 +77,136 @@
     $aktif = "SELECT * FROM daftars WHERE aktif='aktif'";
     $result_aktif = mysqli_query($koneksi, $aktif);
     $jumlahaktif = mysqli_num_rows($result_aktif);
-    // Buat Greeting
-    date_default_timezone_set('Asia/Jakarta');
-    $hour = date('H');
-    if ($hour < 12) {
-        $greeting = "Selamat Pagi";
-    } elseif ($hour < 15) {
-        $greeting = "Selamat Siang";
-    } elseif ($hour < 19) {
-        $greeting = "Selamat Sore";
-    } else {
-        $greeting = "Selamat Malam";
-    }
-    ?>
+    // Jumlah Data Kepergian
+    $taiwan = "SELECT * FROM daftars WHERE negara='Taiwan'";
+    $result_taiwan = mysqli_query($koneksi, $taiwan);
+    $jumlahtaiwan = mysqli_num_rows($result_taiwan);
 
-    <?php include 'include/navbar.php'; ?>
-    <div class="container content">
-        <h2><?php echo $greeting; ?> </h2><br>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card text-white bg-danger mb-3">
-                    <div class="card-body">
-                        <h1 class="card-title"><?php echo $jumlahadmin; ?></h1>
-                        <p class="card-text">Jumlah Admin.</p>
+    $malaysia = "SELECT * FROM daftars WHERE negara='Malaysia'";
+    $result_malaysia = mysqli_query($koneksi, $malaysia);
+    $jumlahmalaysia = mysqli_num_rows($result_malaysia);
+
+    $singapura = "SELECT * FROM daftars WHERE negara='Singapura'";
+    $result_singapura = mysqli_query($koneksi, $singapura);
+    $jumlahsingapura = mysqli_num_rows($result_singapura);
+
+    $korsel = "SELECT * FROM daftars WHERE negara='Korea Selatan'";
+    $result_korsel = mysqli_query($koneksi, $korsel);
+    $jumlahkorsel = mysqli_num_rows($result_korsel);
+
+    $hongkong = "SELECT * FROM daftars WHERE negara='Hong Kong'";
+    $result_hongkong = mysqli_query($koneksi, $hongkong);
+    $jumlahhongkong = mysqli_num_rows($result_hongkong);
+
+    $japan = "SELECT * FROM daftars WHERE negara='Jepang'";
+    $result_japan = mysqli_query($koneksi, $japan);
+    $jumlahjapan = mysqli_num_rows($result_japan);
+    ?>
+    <div class="container-scroller">
+        <!-- partial:partials/_sidebar.html -->
+        <?php include("include/sidebar.php"); ?>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_navbar.html -->
+            <?php include("include/navbar.php"); ?>
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <h2><?php echo $sapaan; ?>, Admin</h2><br>
+                    <div class="row">
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <div class="d-flex align-items-center align-self-start">
+                                                <h2 class="mb-0"><?php echo $jumlahagensi ?></h2>
+                                            </div>
+                                        </div>
+                                    </div><br>
+                                    <h6 class="text-muted font-weight-normal">Jumlah Agency</h6>
+                                    <a href="daftar_admin.php" class="btn btn-primary">Lihat Selengkapnya</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <div class="d-flex align-items-center align-self-start">
+                                                <h2 class="mb-0"><?php echo $jumlahadmin ?></h2>
+                                            </div>
+                                        </div>
+                                    </div><br>
+                                    <h6 class="text-muted font-weight-normal">Jumlah Admin</h6>
+                                    <a href="daftar_admin2.php" class="btn btn-primary">Lihat Selengkapnya</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <div class="d-flex align-items-center align-self-start">
+                                                <h2 class="mb-0"><?php echo $jumlahpengaduan ?></h2>
+                                            </div>
+                                        </div>
+                                    </div><br>
+                                    <h6 class="text-muted font-weight-normal">Jumlah Pengaduan</h6>
+                                    <a href="daftar_pengaduan.php" class="btn btn-primary">Lihat Selengkapnya</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <div class="d-flex align-items-center align-self-start">
+                                                <h2 class="mb-0"><?php echo $jumlahpendaftar ?></h2>
+                                            </div>
+                                        </div>
+                                    </div><br>
+                                    <h6 class="text-muted font-weight-normal">Jumlah Pendaftar</h6>                         
+                                    <a href="admin.php" class="btn btn-primary">Lihat Selengkapnya</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                <?php include("include/footer.php"); ?>
+                <!-- partial -->
             </div>
-            <div class="col-md-12">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-body">
-                        <h1 class="card-title"><?php echo $jumlahterverfikasi; ?></h1>
-                        <p class="card-text">Jumlah User yang Terverifikasi ✔.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-body">
-                        <h1 class="card-title"><?php echo $jumlahditerima; ?></h1>
-                        <p class="card-text">Data Pendaftaran yang sudah diterima.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-body">
-                        <h1 class="card-title"><?php echo $jumlahaktif; ?></h1>
-                        <p class="card-text">Data Pendaftaran yang sudah Aktif.</p>
-                    </div>
-                </div>
-            </div>
+            <!-- main-panel ends -->
         </div>
+        <!-- page-body-wrapper ends -->
     </div>
-    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="assets/vendors/chart.js/Chart.min.js"></script>
+    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+    <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="assets/js/off-canvas.js"></script>
+    <script src="assets/js/hoverable-collapse.js"></script>
+    <script src="assets/js/misc.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script src="assets/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="assets/js/dashboard.js"></script>
+    <!-- End custom js for this page -->
+</body>
+
+</html>

@@ -57,6 +57,16 @@ class ComposerStaticInitddb16df38799ee3977e960ef626fbb22
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'P' => 
+        array (
+            'PHPExcel' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
@@ -67,6 +77,7 @@ class ComposerStaticInitddb16df38799ee3977e960ef626fbb22
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitddb16df38799ee3977e960ef626fbb22::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitddb16df38799ee3977e960ef626fbb22::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitddb16df38799ee3977e960ef626fbb22::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitddb16df38799ee3977e960ef626fbb22::$classMap;
 
         }, null, ClassLoader::class);

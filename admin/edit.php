@@ -9,21 +9,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="cbm.png">
 </head>
 
 <body>
     <?php
-    include 'koneksi.php';
+    include '../koneksi.php';
     session_start();
-    $id_pendaftaran = $_GET['id_pendaftaran'];
-    $sql = "SELECT * FROM daftars WHERE id_pendaftaran = '$id_pendaftaran'";
+    $id_daftar = $_SESSION['id_daftar'];
+    $sql = "SELECT * FROM daftar WHERE id_daftar = '$id_daftar'";
     $data = mysqli_query($koneksi, $sql);
     while ($d = mysqli_fetch_array($data)) {
     ?>
         <div class="container card">
             <h5>Update Data dengan Nama "<?php echo $d['nama_lengkap']; ?>"</h5>
             <form action="edit.php" method="post">
-                <input type="hidden" name="id_pendaftaran" value="<?php echo $d['id_pendaftaran']; ?>">
+                <input type="hidden" name="id_daftar" value="<?php echo $d['id_daftar']; ?>">
                 <div class="form-group">
                     <label for="nik">Nomor Induk Kependudukan *</label>
                     <input type="number" class="form-control" id="nik" placeholder="Masukkan Nomor Induk Kependudukan" name="nik" required value="<?php echo $d['nik']; ?>">
@@ -89,6 +90,30 @@
                     <label for="telepon">Nomor Telepon *</label>
                     <input type="number" class="form-control" id="telepon" placeholder="Masukkan Telepon yang bisa dihubungi" name="telepon" required value="<?php echo $d['telepon']; ?>">
                 </div>
+                <div class="form-group">
+                    <label for="nama_lengkap">Jenis Pekerjaan *</label>
+                    <select id="status" name="pekerjaan" class="form-control" required>
+                        <option value="Perawat Orang Tua">Perawat Orang Tua</option>
+                        <option value="Panti Jompo">Panti Jompo</option>
+                        <option value="Konstruksi">Konstruksi</option>
+                        <option value="Manufaktur">Manufaktur</option>
+                        <option value="Housemaid">Housemaid</option>
+                        <option value="Baby Sitter">Baby Sitter</option>
+                        <option value="Welder">Welder</option>
+                        <option value="Filter">Filter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nama_lengkap">Negara Tujuan *</label>
+                    <select id="status" name="negara" class="form-control" required>
+                        <option value="Taiwan">Taiwan</option>
+                        <option value="Hong Kong">Hong Kong</option>
+                        <option value="Singapura">Singapura</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Korea Selatan">Korea Selatan</option>
+                        <option value="Jepang">Jepang</option>
+                    </select>
+                </div>
                 <input type="submit" value="Update" class="btn btn-primary form-control" name="update">
             </form>
         <?php } ?>
@@ -96,7 +121,7 @@
 
         <?php
         if (isset($_POST['update'])) {
-            $id_pendaftaran = $_POST['id_pendaftaran'];
+            $id_daftar = $_POST['id_daftar'];
             $nik = $_POST['nik'];
             $nama_lengkap = $_POST['nama_lengkap'];
             $tempat_lahir = $_POST['tempat_lahir'];
@@ -110,14 +135,16 @@
             $desa = $_POST['desa'];
             $alamat_lengkap = $_POST['alamat_lengkap'];
             $telepon = $_POST['telepon'];
+            $pekerjaan = $_POST['pekerjaan'];
+            $negara = $_POST['negara'];
 
-            include "koneksi.php";
-            $update = mysqli_query($koneksi, "UPDATE daftars SET nik = '$nik', nama_lengkap = '$nama_lengkap', tempat_lahir = '$tempat_lahir', tgl_lahir = '$tgl_lahir', status = '$status', tinggi = '$tinggi', berat = '$berat', id_provinsi = '$provinsi', id_kota = '$kota', id_kecamatan = '$kecamatan', id_desa = '$desa', alamat_lengkap = '$alamat_lengkap', telepon = '$telepon' WHERE id_pendaftaran = '$id_pendaftaran';");
+            include "../koneksi.php";
+            $update = mysqli_query($koneksi, "UPDATE daftar SET nik = '$nik', nama_lengkap = '$nama_lengkap', tempat_lahir = '$tempat_lahir', tgl_lahir = '$tgl_lahir', status = '$status', tinggi = '$tinggi', berat = '$berat', id_provinsi = '$provinsi', id_kota = '$kota', id_kecamatan = '$kecamatan', id_desa = '$desa', alamat_lengkap = '$alamat_lengkap', telepon = '$telepon', pekerjaan = '$pekerjaan', negara = '$negara' WHERE id_daftar = '$id_daftar';");
 
             if ($update) {
                 echo "<script>
         alert('Data berhasil diperbarui 😁');
-        window.location='admin.php';
+        window.location='detail.php';
         </script>";
             } else {
                 echo "Error: " . mysqli_error($koneksi);

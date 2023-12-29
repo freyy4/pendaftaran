@@ -17,7 +17,18 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        .gradient-custom {
+            /* fallback for old browsers */
+            background: #6a11cb;
+
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+        }
+    </style>
 
     <link rel="icon" href="Favicon.png">
 
@@ -28,43 +39,27 @@
 </head>
 
 <body>
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5">
 
-    <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
-        <div class="container">
-            <a class="navbar-brand" href="#">Pendaftaran TKI Online</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
-
-    <main class="login-form">
-        <div class="cotainer">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">Verifikasi Akun</div>
-                        <div class="card-body">
-                            <form action="#" method="POST">
-                                <div class="form-group row">
-                                    <label for="email_address" class="col-md-4 col-form-label text-md-right">Kode OTP</label>
-                                    <div class="col-md-6">
-                                        <input type="text" id="otp" class="form-control" name="otp_code" required autofocus>
-                                    </div>
+                            <form class="mb-md-5 mt-md-4 pb-5" action="#" method="POST">
+                                <div class="form-outline form-white mb-4">
+                                    <label class="form-label" for="typeEmailX">Kode OTP</label>
+                                    <input type="text" id="otp" class="form-control form-control-lg" name="otp_code" placeholder="Masukkan Kode OTP" required autofocus><br>
+                                    <p class="text-warning">Masukkan kode OTP yang kami kirimkan ke Nomor WhatsApp Anda.</p>
                                 </div>
-
-                                <div class="col-md-6 offset-md-4">
-                                    <input type="submit" value="Verify" name="verify">
-                                </div>
+                                <input type="submit" class="btn btn-outline-light btn-lg px-5" value="Verifikasi" name="verify">
+                            </form>
                         </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-
-    </main>
+    </section>
 </body>
 
 </html>
@@ -72,21 +67,21 @@
 include('koneksi.php');
 if (isset($_POST["verify"])) {
     $otp = $_SESSION['otp'];
-    $email = $_SESSION['mail'];
+    $nowa = $_SESSION['nowa'];
     $otp_code = $_POST['otp_code'];
 
     if ($otp != $otp_code) {
 ?>
         <script>
-            alert("OTP tidak sama dengan yang kami kirimkan ke Email Anda. Coba lagi");
+            alert("OTP tidak sama dengan yang kami kirimkan ke Nomor WhatApp, Coba lagi");
         </script>
     <?php
     } else {
-        mysqli_query($koneksi, "UPDATE login SET status = 1 WHERE email = '$email'");
+        mysqli_query($koneksi, "UPDATE login SET status = 1 WHERE nowa = '$nowa'");
     ?>
         <script>
-            alert("Verifikasi Berhasil, silahkan login dengan akun Email Anda");
-            window.location.replace("login.php");
+            alert("Verifikasi Berhasil, silahkan login dengan Nomor WhatsApp Anda");
+            window.location.replace("index.php");
         </script>
 <?php
     }

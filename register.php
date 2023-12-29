@@ -1,73 +1,83 @@
-<?php session_start(); ?>
 <?php
+session_start();
 include('koneksi.php');
 
 if (isset($_POST["register"])) {
-    $email = $_POST["email"];
+    $nowa = $_POST["nowa"];
     $password = $_POST["password"];
 
-    $check_query = mysqli_query($koneksi, "SELECT * FROM login where email ='$email'");
+    $check_query = mysqli_query($koneksi, "SELECT * FROM login where nowa ='$nowa'");
     $rowCount = mysqli_num_rows($check_query);
 
-    if (!empty($email) && !empty($password)) {
+    if (!empty($nowa) && !empty($password)) {
         if ($rowCount > 0) {
-?>
+            ?>
             <script>
-                alert("Email sudah ada");
+                alert("Nomor WhatsApp sudah ada");
             </script>
             <?php
         } else {
             $password_hash = password_hash($password, PASSWORD_BCRYPT);
+            $user = "user";
 
-            $result = mysqli_query($koneksi, "INSERT INTO login (email, password, status) VALUES ('$email', '$password_hash', 0)");
-
+            $result = mysqli_query($koneksi, "INSERT INTO login (nowa, password, status, role) VALUES ('$nowa', '$password_hash', 0, '$user')");
             if ($result) {
                 $otp = rand(100000, 999999);
                 $_SESSION['otp'] = $otp;
-                $_SESSION['mail'] = $email;
-                require "Mail/phpmailer/PHPMailerAutoload.php";
-                $mail = new PHPMailer;
+                $_SESSION['nowa'] = $nowa;
+                $curl = curl_init();
+                $dataSending = array(
+                    "api_key" => "VLEHPESTOYDX4GKW",
+                    "number_key" => "NV7JDP4tjchTa67Y",
+                    "phone_no" => $nowa,
+                    "message" => "Halo, Selamat Datang di WhatsApp Resmi PT. Crystal Biru Meuligo, Kode OTP-mu adalah : $otp"
+                );
+                curl_setopt_array($curl, array(
+                  CURLOPT_URL => 'https://api.watzap.id/v1/send_message',
+                  CURLOPT_RETURNTRANSFER => true,
+                  CURLOPT_ENCODING => '',
+                  CURLOPT_MAXREDIRS => 10,
+                  CURLOPT_TIMEOUT => 0,
+                  CURLOPT_FOLLOWLOCATION => true,
+                  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                  CURLOPT_CUSTOMREQUEST => 'POST',
+                  CURLOPT_POSTFIELDS => json_encode($dataSending),
+                  CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json'
+                  ),
+                ));
 
-                $mail->isSMTP();
-                $mail->Host = 'smtpdm-ap-southeast-1.aliyun.com';
-                $mail->Port = 465;
-                $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'ssl';
+                $response = curl_exec($curl);
 
-                $mail->Username = 'info@crystalbirumeuligo.com';
-                $mail->Password = '444R3Km4l4n9BB';
-
-                $mail->setFrom('info@crystalbirumeuligo.com', 'PT Crystal Biru Meuligo');
-                $mail->addAddress($_POST["email"]);
-
-                $mail->isHTML(true);
-                $mail->Subject = "Verifikasi Email";
-                $mail->Body = "<p>Verifikasi Email dengan Kode OTP dibawah ini</p><br>
-                    <h1 align=center>$otp</h1>
-                    <br><br><br>
-                    <p>Hormat Kami</p><br><br>
-                    <b>PT. Crystal Biru Meuligo</b>";
-
-                if (!$mail->send()) {
-            ?>
-                    <script>
-                        alert("<?php echo "Registrasi Gagal, Coba lagi" ?>");
-                    </script>
-                <?php
-                } else {
+                curl_close($curl);
+                echo $response;
                 ?>
-                    <script>
-                        alert("<?php echo "Register Berhasil, OTP berhasil dikirim ke email" . $email ?>");
-                        window.location.replace('verification.php');
-                    </script>
-<?php
-                }
+            <script>
+                alert("Register Berhasil, OTP berhasil dikirim ke Nomor WhatsApp <?php echo $nowa; ?>");
+                window.location.replace('verification.php');
+            </script>
+            <?php
             }
         }
     }
 }
-
 ?>
+
+<!-- Kode HTML lainnya tetap sama -->
+
+<script>
+    const toggle = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+
+    toggle.addEventListener('click', function() {
+        if (password.type === "password") {
+            password.type = 'text';
+        } else {
+            password.type = 'password';
+        }
+        this.classList.toggle('bi-eye');
+    });
+
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -91,6 +101,19 @@ if (isset($_POST["register"])) {
 
     <link rel="icon" href="Favicon.png">
 
+    <style>
+        .gradient-custom {
+            /* fallback for old browsers */
+            background: #6a11cb;
+
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+        }
+    </style>
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
@@ -99,68 +122,56 @@ if (isset($_POST["register"])) {
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
-        <div class="container">
-            <a class="navbar-brand" href="#">Pendaftaran TKI Online</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5">
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php" style="font-weight:bold; color:black; text-decoration:underline">Register</a>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
-
-    <main class="login-form">
-        <div class="cotainer">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">Registrasi</div>
-                        <div class="card-body">
-                            <form action="#" method="POST" name="register">
-                                <div class="form-group row">
-                                    <label for="email_address" class="col-md-4 col-form-label text-md-right">E-Mail</label>
-                                    <div class="col-md-6">
-                                        <input type="text" id="email_address" class="form-control" name="email" required autofocus>
+                            <form class="mb-md-5 mt-md-4 pb-5" action="register.php" method="POST" name="register">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <img src="https://crystalbirumeuligo.com/images/logo_cbm.png" class="img-fluid mx-auto" style="width: 150px; height: 150px;">
                                     </div>
-                                </div>  
-
-                                <div class="form-group row">
-                                    <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-                                    <div class="col-md-6">
-                                        <input type="password" id="password" class="form-control" name="password" required><br>
-                                        <i class="bi bi-eye-slash" id="togglePassword"> Lihat Password</i> 
-                                    </div>
+                                </div><br>
+                                <div class="form-outline form-white mb-4">
+                                    <label class="form-label" for="typeEmailX">Nomor WhatsApp</label>
+                                    <input type="number" id="nowa" class="form-control form-control-lg" name="nowa" placeholder="Masukkan Nomor WhatsApp" required autofocus />
                                 </div>
 
-                                <div class="col-md-6 offset-md-4">
-                                    <input type="submit" value="Register" name="register" class="btn btn-success">
+                                <div class="form-outline form-white mb-4">
+                                    <label class="form-label" for="typePasswordX">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" id="password" class="form-control form-control-lg" name="password" placeholder="Masukkan Password" required>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <input type="checkbox" id="togglePassword">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <input type="submit" class="btn btn-outline-light btn-lg px-5" value="Daftar" name="register">
+                            </form>
+
+                            <div>
+                                <p class="mb-0">Sudah punya Akun? <a href="index.php" class="text-white-50 fw-bold">Masuk disini</a>
+                                </p>
+                            </div>
+
                         </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-
-    </main>
+    </section>
 </body>
 
 </html>
 <script>
     const toggle = document.getElementById('togglePassword');
     const password = document.getElementById('password');
+    const nowa = document.getElementById('nowa');
 
     toggle.addEventListener('click', function() {
         if (password.type === "password") {
@@ -169,5 +180,15 @@ if (isset($_POST["register"])) {
             password.type = 'password';
         }
         this.classList.toggle('bi-eye');
+    });
+
+    document.querySelector('form[name="login"]').addEventListener('submit', function (event) {
+        // Check if the input is a phone number
+        const isPhoneNumber = /^\d+$/.test(nowa.value);
+
+        // If it's a phone number, remove leading '0' and prepend '62'
+        if (isPhoneNumber && nowaInput.value.startsWith('0')) {
+            nowaInput.value = '62' + nowaInput.value.slice(1);
+        }
     });
 </script>
