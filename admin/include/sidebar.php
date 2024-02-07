@@ -37,29 +37,14 @@
           <span class="menu-icon">
             <i class="mdi mdi-laptop"></i>
           </span>
-          <span class="menu-title">Verifikasi PMI</span>
+          <span class="menu-title">PMI dan Agency</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse" id="ui-basic">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="daftar.php">Tambah Data PMI</a></li>
-            <li class="nav-item"> <a class="nav-link" href="admin.php">Data PMI</a></li>
-          </ul>
-        </div>
-      </li>
-      <li class="nav-item menu-items">
-        <a class="nav-link" data-bs-toggle="collapse" href="#aduan1" aria-expanded="false" aria-controls="ui-basic">
-          <span class="menu-icon">
-            <i class="mdi mdi-wallet-travel"></i>
-          </span>
-          <span class="menu-title">Agency / Admin</span>
-          <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse" id="aduan1">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="tambah_user.php">Tambah Agency</a></li>
-            <li class="nav-item"> <a class="nav-link" href="daftar_admin.php">Data Agency</a></li>
+            <li class="nav-item"> <a class="nav-link" href="admin.php">Pekerja Migran Indonesia</a></li>
             <li class="nav-item"> <a class="nav-link" href="daftar_admin2.php">Data Admin</a></li>
+            <li class="nav-item"> <a class="nav-link" href="daftar_admin.php">Agency</a></li>
           </ul>
         </div>
       </li>
@@ -77,6 +62,14 @@
             <li class="nav-item"> <a class="nav-link" href="daftar_pengaduan.php">Data Pengaduan</a></li>
           </ul>
         </div>
+      </li>
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="https://chat.crystalbirumeuligo.com/login">
+          <span class="menu-icon">
+            <i class="mdi mdi-speedometer"></i>
+          </span>
+          <span class="menu-title">Chat</span>
+        </a>
       </li>
     </ul>
   </nav>

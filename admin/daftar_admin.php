@@ -35,6 +35,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h2 class="card-title">Data Agency</h2>
+                                <a class="btn btn-primary" href="tambah_user.php">Tambah Agency</a>
                                 <div class="table-responsive">
                                     <table class="table" id="mydata">
                                         <thead>

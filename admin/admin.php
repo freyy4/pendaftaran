@@ -22,7 +22,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="assets/images/Screenshot__3_-removebg-preview.png" />
+    <link rel="shortcut icon" href="favicon.jpg" />
 </head>
 
 <body>
@@ -48,13 +48,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="card-title">Daftar PMI yang sudah Masuk</h3>
+                                <a class="btn btn-primary" href="../daftara.php">Tambah Data PMI</a>
                                 <div class="table-responsive">
                                     <table class="table" id="mydata">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>NIK</th>
-                                                <th>Nomor Daftar</th>
                                                 <th>Nama Lengkap</th>
                                                 <th>Penerimaan</th>
                                                 <th>Aktif</th>
@@ -74,12 +73,10 @@
                                                 while ($row = $result->fetch_assoc()) {
                                                     echo "<tr>";
                                                     echo "<td>" . $no++ . "</td>";
-                                                    echo "<td>" . $row["nik"] . "</td>";
-                                                    echo "<td>" . $row["id_daftar"] . "</td>";
                                                     echo "<td>" . $row["nama_lengkap"] . "</td>";
                                                     echo "<td class='" . ($row["terima"] === "terima" ? "text-success" : "text-danger") . "'>" . $row["terima"] . "</td>";
                                                     echo "<td class='" . ($row["aktif"] === "aktif" ? "text-success" : "text-danger") . "'>" . $row["aktif"] . "</td>";
-                                                    echo "<td><a href='detail.php?id_daftar=" . $row["id_daftar"] . "' class='btn btn-primary'>
+                                                    echo "<td><a href='../dash2.php?id_daftar=" . $row["id_daftar"] . "' class='btn btn-primary'>
                                                     <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-down-right-circle-fill' viewBox='0 0 16 16'>
                                                         <path d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm5.904-2.803a.5.5 0 1 0-.707.707L9.293 10H6.525a.5.5 0 0 0 0 1H10.5a.5.5 0 0 0 .5-.5V6.525a.5.5 0 0 0-1 0v2.768L5.904 5.197z'/>
                                                     </svg>

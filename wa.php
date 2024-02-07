@@ -65,26 +65,68 @@ if (isset($_POST["recover"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lupa Password</title>
-    <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <style>
+    body {
+        background: #373B44;
+        background: -webkit-linear-gradient(190deg, #4286f4, #373B44);
+        background: linear-gradient(190deg, #4286f4, #373B44);
+        font-family: 'Raleway', sans-serif;
+        color: white;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    input[type=number],
+    input[type=password] {
+        background-color: transparent;
+    }
+
+    input[type=number]::placeholder,
+    input[type=password]::placeholder {
+        color: white;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+    }
+
+    #togglePassword {
+        cursor: pointer;
+    }
+
+    .usaha {
+        width: 60px;
+        height: 60px;
+    }
+
+    p,
+    label,
+    a,
+    .btn {
+        color: white !important;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Lupa Password</div>
-                    <div class="card-body">
-                        <form method="POST" action="#">
-                            <div class="form-group">
-                                <label for="nowa">Nomor WhatsApp:</label>
-                                <input type="number" class="form-control" id="nowa" name="nowa" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary" name="recover">Kirim Reset Link</button>
-                        </form>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">Lupa Password</div>
+            <div class="card-body">
+                <form method="POST" action="#">
+                    <div class="form-group">
+                        <label for="nowa">Nomor WhatsApp:</label>
+                        <input type="number" class="form-control" id="nowa" name="nowa" required>
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-primary" name="recover">Kirim Reset Link</button>
+                </form>
             </div>
         </div>
     </div>

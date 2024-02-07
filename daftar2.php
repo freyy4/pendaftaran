@@ -18,76 +18,107 @@ if (empty($_SESSION['login'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
 </head>
 
 <body>
     <?php
     $id_daftar = $_SESSION['id_daftar'];
     ?>
+    <?php include "navbar1.php"; ?>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active text-success" aria-current="page">Data Diri</li>
+            <li class="breadcrumb-item active" aria-current="page">Riwayat Pendidikan</li>
+        </ol>
+    </nav>
     <div class="container">
-        <form method="post" action="daftar2.php" enctype="multipart/form-data">
-            <input type="hidden" name="id_daftar" value="<?php echo $id_daftar ?>">
-            <div class="table-container table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Nama Sekolah *</th>
-                            <th>Tanggal Masuk Sekolah *</th>
-                            <th>Tanggal Lulus Sekolah *</th>
-                            <th>Ijazah Sekolah *</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <tr>
-                            <td>
-                                <input type="text" class="form-control" name="nama_sekolah[]" placeholder="Masukkan Nama Sekolah" multiple>
-                            </td>
-                            <td>
-                                <input type="date" class="form-control" name="tgl_masuk_sekolah[]" multiple>
-                            </td>
-                            <td>
-                                <input type="date" class="form-control" name="tgl_lulus_sekolah[]" multiple>
-                            </td>
-                            <td>
-                                <input type="file" class="form-control" name="ijazah_sekolah[]" multiple>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p>Klik "&plus; Tambah Data" jika Anda mempunyai data lebih dari 1</p>
-                <button type="button" class="btn btn-success form-control" id="add-row-btn">&plus; Tambah Baris</button>
-            </div>
-            <button type="submit" class="btn btn-primary form-control" name="daftar">Lanjut</button>
-        </form>
+        <div class="card">
+            <div class="card-body">
+                <h3>Riwayat Pendidikan</h3>
+                <form method="post" action="daftar2.php" enctype="multipart/form-data">
+                    <input type="hidden" name="id_daftar" value="<?php echo $id_daftar ?>">
+                    <div class="table-container table-responsive">
+                        <table class="table" id="education-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama Sekolah</th>
+                                    <th>Tanggal Masuk Sekolah</th>
+                                    <th>Tanggal Lulus Sekolah</th>
+                                    <th>Ijazah Sekolah</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="education-row">
+                                    <td>
+                                        <input type="text" class="form-control nama-sekolah" name="nama_sekolah[]"
+                                            placeholder="Masukkan Nama Sekolah" required>
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control tgl-masuk" name="tgl_masuk_sekolah[]"
+                                            required>
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control tgl-lulus" name="tgl_lulus_sekolah[]"
+                                            required>
+                                    </td>
+                                    <td>
+                                        <input type="file" class="form-control ijazah-sekolah" name="ijazah_sekolah[]"
+                                            required accept="image/*,application/pdf">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-success" id="add-row-btn">&plus; Tambah Sekolah</button>
+                </div>
+                <button type="submit" class="btn btn-primary" name="daftar">Lanjut >></button>
+            </form>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const addRowBtn = document.getElementById("add-row-btn");
-            const tableBody = document.getElementById("table-body");
+    document.addEventListener("DOMContentLoaded", function() {
+        const addRowBtn = document.getElementById("add-row-btn");
+        const tableBody = document.getElementById("education-table").getElementsByTagName('tbody')[0];
 
-            addRowBtn.addEventListener("click", function() {
-                const newRow = document.createElement("tr");
-                newRow.innerHTML = `
+        addRowBtn.addEventListener("click", function() {
+            const newRow = tableBody.insertRow(tableBody.rows.length - 1);
+            newRow.className = 'education-row';
+            newRow.innerHTML = `
                     <td>
-                        <input type="text" class="form-control" name="nama_sekolah[]" placeholder="Masukkan Nama Sekolah" multiple>
+                        <input type="text" class="form-control nama-sekolah" name="nama_sekolah[]" placeholder="Masukkan Nama Sekolah" required>
                     </td>
                     <td>
-                        <input type="date" class="form-control" name="tgl_masuk_sekolah[]" multiple>
+                        <input type="date" class="form-control tgl-masuk" name="tgl_masuk_sekolah[]" required>
                     </td>
                     <td>
-                        <input type="date" class="form-control" name="tgl_lulus_sekolah[]" multiple>
+                        <input type="date" class="form-control tgl-lulus" name="tgl_lulus_sekolah[]" required>
                     </td>
                     <td>
-                        <input type="file" class="form-control" name="ijazah_sekolah[]" multiple>
+                        <input type="file" class="form-control ijazah-sekolah" name="ijazah_sekolah[]" required accept="image/*,application/pdf">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Hapus</button>
                     </td>
                 `;
-
-                tableBody.appendChild(newRow);
-            });
         });
+
+        tableBody.addEventListener("click", function(event) {
+            if (event.target.classList.contains('remove-row')) {
+                const row = event.target.closest('.education-row');
+                row.remove();
+            }
+        });
+    });
     </script>
+
 </body>
 
 </html>

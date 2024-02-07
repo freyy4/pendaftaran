@@ -5,32 +5,35 @@ include('koneksi.php');
 if (isset($_POST["register"])) {
     $nowa = $_POST["nowa"];
     $password = $_POST["password"];
+    $nama = $_POST["nama"];
 
     $check_query = mysqli_query($koneksi, "SELECT * FROM login where nowa ='$nowa'");
     $rowCount = mysqli_num_rows($check_query);
 
     if (!empty($nowa) && !empty($password)) {
         if ($rowCount > 0) {
-            ?>
-            <script>
-                alert("Nomor WhatsApp sudah ada");
-            </script>
-            <?php
+            echo '<div class="alert alert-danger alert-dismissible fade show sticky-top" role="alert">
+            <strong>Oops...</strong> Nomor WhatsApp ada
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>';
         } else {
             $password_hash = password_hash($password, PASSWORD_BCRYPT);
             $user = "user";
 
-            $result = mysqli_query($koneksi, "INSERT INTO login (nowa, password, status, role) VALUES ('$nowa', '$password_hash', 0, '$user')");
+            $result = mysqli_query($koneksi, "INSERT INTO login (nama, nowa, password, status, role) VALUES ('$nama', '$nowa', '$password_hash', 0, '$user')");
             if ($result) {
                 $otp = rand(100000, 999999);
                 $_SESSION['otp'] = $otp;
                 $_SESSION['nowa'] = $nowa;
+                $_SESSION['nama'] = $nama;
                 $curl = curl_init();
                 $dataSending = array(
                     "api_key" => "VLEHPESTOYDX4GKW",
                     "number_key" => "NV7JDP4tjchTa67Y",
                     "phone_no" => $nowa,
-                    "message" => "Halo, Selamat Datang di WhatsApp Resmi PT. Crystal Biru Meuligo, Kode OTP-mu adalah : $otp"
+                    "message" => "Halo $nama, Selamat Datang di WhatsApp Resmi PT. Crystal Biru Meuligo, Kode OTP-mu adalah : $otp"
                 );
                 curl_setopt_array($curl, array(
                   CURLOPT_URL => 'https://api.watzap.id/v1/send_message',
@@ -50,145 +53,131 @@ if (isset($_POST["register"])) {
                 $response = curl_exec($curl);
 
                 curl_close($curl);
-                echo $response;
-                ?>
-            <script>
-                alert("Register Berhasil, OTP berhasil dikirim ke Nomor WhatsApp <?php echo $nowa; ?>");
-                window.location.replace('verification.php');
-            </script>
-            <?php
+                echo '<script>
+                    alert("Registrasi Berhasil, OTP berhasil dikirim ke Nomor WhatsApp' .  $nowa . '");
+                    window.location.replace("verification.php");
+                    </script>';
             }
         }
     }
 }
 ?>
-
-<!-- Kode HTML lainnya tetap sama -->
-
-<script>
-    const toggle = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-
-    toggle.addEventListener('click', function() {
-        if (password.type === "password") {
-            password.type = 'text';
-        } else {
-            password.type = 'password';
-        }
-        this.classList.toggle('bi-eye');
-    });
-
-
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
-<!------ Include the above in your HEAD tag ---------->
-
 <!doctype html>
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="favicon.jpg" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <style>
+    body {
+        background: #373B44;
+        background: -webkit-linear-gradient(190deg, #4286f4, #373B44);
+        background: linear-gradient(190deg, #4286f4, #373B44);
+        font-family: 'Raleway', sans-serif;
+        color: white;
+    }
 
-    <!-- Fonts -->
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+    }
+
+    #togglePassword {
+        cursor: pointer;
+    }
+
+    .usaha {
+        width: 60px;
+        height: 60px;
+    }
+    p,
+    label,
+    a,
+    .btn {
+        color: white !important;
+    }
+    </style>
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href="style.css">
-
     <link rel="icon" href="Favicon.png">
-
-    <style>
-        .gradient-custom {
-            /* fallback for old browsers */
-            background: #6a11cb;
-
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
-        }
-    </style>
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
-    <title>Pendaftaran TKI Online | Registrasi Calon Tenaga Kerja</title>
+    <title>Registrasi PT CBM | Pendaftaran Online</title>
 </head>
 
 <body>
-
-    <section class="vh-100 gradient-custom">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                        <div class="card-body p-5">
-
-                            <form class="mb-md-5 mt-md-4 pb-5" action="register.php" method="POST" name="register">
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <img src="https://crystalbirumeuligo.com/images/logo_cbm.png" class="img-fluid mx-auto" style="width: 150px; height: 150px;">
-                                    </div>
-                                </div><br>
-                                <div class="form-outline form-white mb-4">
-                                    <label class="form-label" for="typeEmailX">Nomor WhatsApp</label>
-                                    <input type="number" id="nowa" class="form-control form-control-lg" name="nowa" placeholder="Masukkan Nomor WhatsApp" required autofocus />
-                                </div>
-
-                                <div class="form-outline form-white mb-4">
-                                    <label class="form-label" for="typePasswordX">Password</label>
-                                    <div class="input-group">
-                                        <input type="password" id="password" class="form-control form-control-lg" name="password" placeholder="Masukkan Password" required>
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <input type="checkbox" id="togglePassword">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="submit" class="btn btn-outline-light btn-lg px-5" value="Daftar" name="register">
-                            </form>
-
-                            <div>
-                                <p class="mb-0">Sudah punya Akun? <a href="index.php" class="text-white-50 fw-bold">Masuk disini</a>
-                                </p>
-                            </div>
-
+    <div class="container">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-3 mb-5">
+                <div class="text-center">
+                    <img class="usaha"
+                        src="https://ptcbm.id/wp-content/uploads/2023/03/logo-pt-cbm-white.png"
+                        alt="">
+                </div>
+                <div class="card-body">
+                    <form class="mb-md-5" action="register.php" method="POST" name="register">
+                        <div class="form-outline form-white mb-4">
+                            <label class="form-label" for="typeEmailX">Nama Lengkap</label>
+                            <input type="text" id="nama" class="form-control" name="nama"
+                                placeholder="Masukkan Nama Lengkap" required autofocus/>
                         </div>
+                        <div class="form-outline form-white mb-4">
+                            <label class="form-label" for="typeEmailX">Nomor WhatsApp</label>
+                            <input type="number" id="nowa" class="form-control" name="nowa"
+                                placeholder="Masukkan Nomor WhatsApp" required/>
+                        </div>
+                        <div class="form-outline form-white mb-4">
+                            <label class="form-label" for="typePasswordX">Password</label>
+                            <div class="input-group">
+                                <input type="password" id="password" class="form-control"
+                                    name="password" placeholder="Masukkan Password" required>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <img src="https://cdn.icon-icons.com/icons2/2406/PNG/512/eye_visible_hide_hidden_show_icon_145988.png"
+                                            height="20px" width="20px" id="togglePassword">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-outline-dark btn-lg btn-block" value="Daftar"
+                            name="register">
+                    </form><br>
+
+                    <div>
+                        <p class="mb-0">Sudah punya Akun? <a href="index.php" class="fw-bold" style="color: white;">Masuk
+                                disini</a>
+                        </p><br>
+                        <p class="text-white text-center" style="font-size:12px;">Copyright &copy; PT. Crystal Biru Meuligo
+                        | 2024</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </body>
 
-</html>
 <script>
-    const toggle = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-    const nowa = document.getElementById('nowa');
+const toggle = document.getElementById('togglePassword');
+const password = document.getElementById('password');
 
-    toggle.addEventListener('click', function() {
-        if (password.type === "password") {
-            password.type = 'text';
-        } else {
-            password.type = 'password';
-        }
-        this.classList.toggle('bi-eye');
-    });
-
-    document.querySelector('form[name="login"]').addEventListener('submit', function (event) {
-        // Check if the input is a phone number
-        const isPhoneNumber = /^\d+$/.test(nowa.value);
-
-        // If it's a phone number, remove leading '0' and prepend '62'
-        if (isPhoneNumber && nowaInput.value.startsWith('0')) {
-            nowaInput.value = '62' + nowaInput.value.slice(1);
-        }
-    });
+toggle.addEventListener('click', function() {
+    if (password.type === "password") {
+        password.type = 'text';
+        toggle.src =
+            'https://cdn.icon-icons.com/icons2/2406/PNG/512/eye_slash_visible_hide_hidden_show_icon_145987.png';
+    } else {
+        password.type = 'password';
+        toggle.src =
+            'https://cdn.icon-icons.com/icons2/2406/PNG/512/eye_visible_hide_hidden_show_icon_145988.png';
+    }
+});
 </script>
+</html>

@@ -18,77 +18,97 @@ if (empty($_SESSION['login'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
 </head>
 
 <body>
     <?php
     $id_daftar = $_SESSION['id_daftar'];
     ?>
+    <?php include "navbar1.php"; ?>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active text-success" aria-current="page">Data Diri</li>
+            <li class="breadcrumb-item active text-success" aria-current="page">Riwayat Pendidikan</li>
+            <li class="breadcrumb-item active" aria-current="page">Pengalaman Bekerja</li>
+        </ol>
+    </nav>
     <div class="container">
-        <form method="post" action="daftar3.php" enctype="multipart/form-data">
-            <input type="hidden" name="id_daftar" value="<?php echo $id_daftar ?>">
-            <div class="table-container table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Nama Perusahaan *</th>
-                            <th>Tanggal Masuk Perusahaan *</th>
-                            <th>Tanggal Keluar Perusahaan *</th>
-                            <th>Pekerjaan *</th>
-                            <th>Jabatan *</th>
-                            <th>Keterangan Pekerjaan</th>
-                            <th>Sertifikasi/Bukti Bekerja</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <tr>
-                            <td>
-                                <input type="text" class="form-control" name="nama_perusahaan[]" placeholder="Masukkan Nama Perusahaan" multiple>
-                            </td>
-                            <td>
-                                <input type="date" class="form-control" name="tgl_masuk_perusahaan[]" multiple>
-                            </td>
-                            <td>
-                                <input type="date" class="form-control" name="tgl_keluar_perusahaan[]" multiple>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="pekerjaan[]" placeholder="Masukkan Nama Pekerjaan" multiple>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="jabatan[]" placeholder="Masukkan Nama Jabatan" multiple>
-                            <td>
-                                <textarea class="form-control" name="keterangan[]" rows="3" placeholder="Masukkan Keterangan Pekerjaan Anda (Tidak harus diisi)"></textarea>
-                            </td>
-                            <td>
-                                <input type="file" class="form-control" name="sertifikasi[]" multiple>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p>Klik "&plus; Tambah Data" jika Anda mempunyai data lebih dari 1</p>
-                <button type="button" class="btn btn-success form-control" id="add-row-btn">&plus; Tambah Baris</button>
+        <div class="card">
+            <div class="card-body">
+                <h3>Pengalaman Bekerja</h3>
+                <form method="post" action="daftar3.php" enctype="multipart/form-data">
+                    <input type="hidden" name="id_daftar" value="<?php echo $id_daftar ?>">
+                    <div class="table-container table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nama Perusahaan</th>
+                                    <th>Tanggal Masuk Perusahaan</th>
+                                    <th>Tanggal Keluar Perusahaan</th>
+                                    <th>Pekerjaan</th>
+                                    <th>Jabatan</th>
+                                    <th>Keterangan Pekerjaan</th>
+                                    <th>Sertifikasi</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" name="nama_perusahaan[]"
+                                            placeholder="Masukkan Nama Perusahaan" multiple>
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control" name="tgl_masuk_perusahaan[]" multiple>
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control" name="tgl_keluar_perusahaan[]" multiple>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="pekerjaan[]"
+                                            placeholder="Masukkan Nama Pekerjaan" multiple>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="jabatan[]"
+                                            placeholder="Masukkan Nama Jabatan" multiple>
+                                    <td>
+                                        <textarea class="form-control" name="keterangan[]" rows="3"
+                                            placeholder="Masukkan Keterangan Pekerjaan Anda (Tidak harus diisi)"></textarea>
+                                    </td>
+                                    <td>
+                                        <input type="file" class="form-control" name="sertifikasi[]" multiple
+                                            accept="image/*,application/pdf">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success" id="add-row-btn">&plus; Tambah
+                            Baris</button>
+                    </div>
             </div>
-            <button type="submit" class="btn btn-primary form-control" name="daftar">Lanjut</button>
-        </form>
+            <button type="submit" class="btn btn-primary" name="daftar">Lanjut >></button>
+            </form>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $(".select2").select2({
-                tags: true,
-                placeholder: function() {
-                    $(this).data('placeholder');
-                },
-                tokenSeparators: [',']
-            });
+    $(document).ready(function() {
+        $(".select2").select2({
+            tags: true,
+            placeholder: function() {
+                $(this).data('placeholder');
+            },
+            tokenSeparators: [',']
+        });
 
-            const addRowBtn = document.getElementById("add-row-btn");
-            const tableBody = document.getElementById("table-body");
+        const addRowBtn = document.getElementById("add-row-btn");
+        const tableBody = document.getElementById("table-body");
 
-            addRowBtn.addEventListener("click", function() {
-                const newRow = document.createElement("tr");
-                newRow.innerHTML = `
+        addRowBtn.addEventListener("click", function() {
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
                     <td>
                         <input type="text" class="form-control" name="nama_perusahaan[]" multiple>
                     </td>
@@ -107,21 +127,32 @@ if (empty($_SESSION['login'])) {
                         <textarea class="form-control" name="keterangan[]" rows="3" placeholder="Masukkan Keterangan Pekerjaan Anda (Tidak harus diisi)"></textarea>
                     </td>
                     <td>
-                        <input type="file" class="form-control" name="sertifikasi[]" multiple>
+                        <input type="file" class="form-control" name="sertifikasi[]" multiple accept="image/*,application/pdf">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Hapus</button>
                     </td>
                 `;
 
-                tableBody.appendChild(newRow);
-                $(".select2").select2({
-                    tags: true,
-                    placeholder: function() {
-                        $(this).data('placeholder');
-                    },
-                    tokenSeparators: [',']
-                });
+            tableBody.appendChild(newRow);
+            $(".select2").select2({
+                tags: true,
+                placeholder: function() {
+                    $(this).data('placeholder');
+                },
+                tokenSeparators: [',']
+            });
+
+            document.querySelector('form').addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-row')) {
+                    const row = event.target.closest('tr');
+                    row.remove();
+                }
             });
         });
+    });
     </script>
+
 </body>
 
 </html>

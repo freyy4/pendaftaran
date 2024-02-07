@@ -131,11 +131,32 @@
                                         <h2 class="card-title">1. Data Diri PMI</h2>
                                     </div>
                                     <div class="preview-list">
+                                        <?php
+                                            $path_folder_a = "";
+                                            $path_folder_b = "../";
+                                        ?>
                                         <div class="card-body">
                                             <?php if ($row1) : ?>
-                                                <img src="<?php echo $row1['selfie_ktp']; ?>" width="150" height="150" alt="Selfie KTP">
-                                                <img src="<?php echo $row1['pas']; ?>" width="150" height="150" alt="Pas Foto">
-                                                <img src="<?php echo $row1['foto_ktp']; ?>" width="150" height="150" alt="Foto KTP"><br><br><br>
+                                                <?php
+                                                    $path_selfie_ktp = $row1['selfie_ktp'];
+                                                    $path_pas_foto = $row1['pas'];
+                                                    $path_foto_ktp = $row1['foto_ktp'];
+                                                
+                                                    function tampilkanGambar($path, $folder_a, $folder_b) {
+                                                        if (file_exists($folder_a . $path)) {
+                                                            echo '<img src="' . $folder_a . $path . '" width="150" height="150" alt="Gambar">';
+                                                        } elseif (file_exists($folder_b . $path)) {
+                                                            echo '<img src="' . $folder_b . $path . '" width="150" height="150" alt="Gambar">';
+                                                        } else {
+                                                            echo 'Gambar tidak ditemukan di kedua folder. Path A: ' . $folder_a . $path . ', Path B: ' . $folder_b . $path;
+                                                        }
+                                                    }                                                    
+                                                    
+                                                    tampilkanGambar($path_selfie_ktp, $path_folder_a, $path_folder_b);
+                                                    tampilkanGambar($path_pas_foto, $path_folder_a, $path_folder_b);
+                                                    tampilkanGambar($path_foto_ktp, $path_folder_a, $path_folder_b);
+                                                ?>
+                                                <br><br><br>
                                                 <label>Daftar ID</label>
                                                 <h1><?php echo $row1['id_daftar']; ?></h1><br><br>
                                                 <label>Nama Lengkap</label><br>
